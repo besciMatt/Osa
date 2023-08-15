@@ -1,0 +1,12 @@
+name: habitSOS
+title: habitSOS
+username: mattwbaldwin
+account: mattwbaldwin
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9572901
+bundleId: 7566775
+url: https://mattwbaldwin.shinyapps.io/habitSOS/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
