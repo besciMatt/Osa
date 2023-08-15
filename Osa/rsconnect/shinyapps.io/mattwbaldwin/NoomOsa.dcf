@@ -5,7 +5,7 @@ account: mattwbaldwin
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9605144
-bundleId: 7566831
+bundleId: 7570299
 url: https://mattwbaldwin.shinyapps.io/NoomOsa/
 version: 1
 asMultiple: FALSE

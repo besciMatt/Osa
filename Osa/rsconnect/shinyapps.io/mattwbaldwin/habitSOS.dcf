@@ -5,7 +5,7 @@ account: mattwbaldwin
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9572901
-bundleId: 7566775
+bundleId: 7570207
 url: https://mattwbaldwin.shinyapps.io/habitSOS/
 version: 1
 asMultiple: FALSE

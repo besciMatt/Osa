@@ -40,7 +40,7 @@ Always consider the conversation as ongoing unless the user explicitly ends it w
 ui <- fluidPage(
   useShinyjs(),
   div(
-    titlePanel("Chat with Osa"),
+    titlePanel(tags$img(src = "osa.png", height = "60px", width = "60px", alt = "Osa"), "Chat with Osa"),
     style = "color: white; background-color: #fb513b"
   ),
   sidebarLayout(
@@ -58,6 +58,7 @@ ui <- fluidPage(
       fluidRow(
         column(12,tags$h3("Chat History"),tags$hr(),uiOutput("chat_history"),tags$hr())
       ),
+      img(src = "typing.gif", id = "typing_gif", style = "display: none; width: 50px; height: auto; float: left;"),
       fluidRow(
         column(11,textAreaInput(inputId = "user_message", placeholder = NULL, label=NULL, width = "100%")),
         column(12,actionButton("send_message", "Send",icon = icon("play"),height = "350px")),
@@ -85,17 +86,22 @@ server <- function(input, output, session) {
     shinyjs::disable("send_message")
     chat_data(rbind(chat_data(), new_data))
     
+    # Display the typing GIF
+    shinyjs::show("typing_gif")
+    
     # Ensure the bot doesn't respond to its own messages
     if (new_data$source != "Osa") {
       # Call GPT-3 API with the chat history
       gpt_res <- call_gpt_api(api_key, chat_data(), system_prompt)
+      
+      # Hide the typing GIF
+      shinyjs::hide("typing_gif")
       
       # Add GPT-3's response to chat history
       chat_data(rbind(chat_data(), data.frame(source = "Osa", message = gpt_res, stringsAsFactors = FALSE)))
     }
     updateTextInput(session, inputId = "user_message", value = "")
     shinyjs::enable("send_message")
-    
   })
   
   
@@ -139,8 +145,14 @@ server <- function(input, output, session) {
   
   output$chat_history <- renderUI({
     chatBox <- lapply(1:nrow(chat_data()), function(i) {
-      tags$div(class = ifelse(chat_data()[i, "source"] == "You", "alert alert-secondary", "alert alert-success"),
-               HTML(paste0("<b>", chat_data()[i, "source"], ":</b> ", chat_data()[i, "message"])))
+      if (chat_data()[i, "source"] == "You") {
+        tags$div(class = "alert alert-secondary", 
+                 HTML(paste0("<b>", chat_data()[i, "source"], ":</b> ", chat_data()[i, "message"])))
+      } else {
+        tags$div(class = "alert alert-success",
+                 tags$img(src = "osa.png", height = "25px", width = "25px", alt = "Osa", style = "margin-right: 5px;"),
+                 HTML(paste0(chat_data()[i, "message"])))
+      }
     })
     do.call(tagList, chatBox)
   })
